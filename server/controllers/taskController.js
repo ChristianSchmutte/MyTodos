@@ -14,11 +14,8 @@ async function addNewTask(req, res) {
       lists: [listId],
       // sections: [sectionId],
     });
-    // console.log(newTask)
     const currList = await list.findById(listId);
-    // console.log(currList)
     const section = await currList.sections.id(sectionId);
-    // console.log(section)
     section.tasks = [newTask._id, ...section.tasks]; // mock or not test ?
     await currList.save(); // mock or not test ?
     const updatedUser = await user.findById(userId);
@@ -99,9 +96,7 @@ async function updateTask(req, res) {
       req.body,
       { new: true },
     );
-    // console.log(userId)
     const currUser = await user.findById(userId);
-    // console.log(currUser)
     const populatedUser = await currUser.populate({
       path: 'lists',
       populate: {
@@ -131,14 +126,10 @@ async function deleteTask(req, res) {
   const { sectionId } = req.params;
   try {
     const currUser = await user.findById(userId);
-    console.log(currUser)
     const list = await currUser.lists.id(listId);
-    console.log(list)
     const section = await list.sections.id(sectionId);
-    console.log(section)
     await section.remove();
     const updatedUser = await currUser.save();
-    console.log(updatedUser)
     res.status(201);
     res.send(updatedUser);
   } catch (error) {
