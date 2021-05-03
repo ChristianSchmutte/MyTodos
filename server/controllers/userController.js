@@ -6,20 +6,9 @@ async function addUser(req, res) {
   } = req.body;
 
   // like param === (undefined || null || '') doesn't resolve the issue
-  const checkUndefined = firstName === undefined
-  || lastName === undefined
-  || email === undefined
-  || password === undefined;
-  const checkNull = firstName === null
-  || lastName === null
-  || email === null
-  || password === null;
-  const checkEmptyString = firstName === ''
-  || lastName === ''
-  || email === ''
-  || password === '';
+  const checkUndefined = !firstName || !lastName || !email || !password;
 
-  if (checkUndefined || checkNull || checkEmptyString) {
+  if (checkUndefined) {
     res.status(400);
     res.send({ message: 'Invalid body' });
   } else {
