@@ -1,7 +1,9 @@
 const user = require('../models/user');
 
 async function addUser(req, res) {
-  const { firstName, lastName, email, password } = req.body;
+  const {
+    firstName, lastName, email, password
+  } = req.body;
 
   // combined version like param === (undefined || null || '') doesn't resolve the issue
   const checkUndefined = firstName === undefined
