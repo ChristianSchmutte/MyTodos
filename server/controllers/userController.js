@@ -5,7 +5,7 @@ async function addUser(req, res) {
     firstName, lastName, email, password
   } = req.body;
 
-  // combined version like param === (undefined || null || '') doesn't resolve the issue
+  // like param === (undefined || null || '') doesn't resolve the issue
   const checkUndefined = firstName === undefined
   || lastName === undefined
   || email === undefined
