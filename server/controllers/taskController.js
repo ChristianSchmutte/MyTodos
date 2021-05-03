@@ -16,8 +16,8 @@ async function addNewTask(req, res) {
     });
     const currList = await list.findById(listId);
     const section = await currList.sections.id(sectionId);
-    section.tasks = [newTask._id, ...section.tasks];
-    await currList.save();
+    section.tasks = [newTask._id, ...section.tasks]; // mock or not test ?
+    await currList.save(); // mock or not test ?
     const updatedUser = await user.findById(userId);
     const populatedUser = await updatedUser.populate({
       path: 'lists',
@@ -37,7 +37,7 @@ async function addNewTask(req, res) {
     res.send(populatedUser.lists);
   } catch (error) {
     res.status(500);
-    res.send({ error, message: 'Could not add task' });
+    res.send({ message: 'Could not add task' }); // error,
     console.error(error); // eslint-disable-line
   }
 }
@@ -47,7 +47,9 @@ async function addExistingTask(req, res) {
   const { listId } = req.params;
   const { sectionId } = req.params;
   if (!req.body.taskId) {
-    return res.status(400).send({ message: 'Body did not include "taskId" property' });
+    res.status(400);
+    res.send({ message: 'Body did not include "taskId" property' });
+    // return res.status(400).send({ message: 'Body did not include "taskId" property' }); // return
   }
   try {
     await task.findByIdAndUpdate(
@@ -78,7 +80,7 @@ async function addExistingTask(req, res) {
     return res.send(populatedUser.lists);
   } catch (error) {
     res.status(500);
-    res.send({ error, message: 'Could not add task' });
+    res.send({ message: 'Could not add task' }); //  error,
     return console.error(error); // eslint-disable-line
   }
 }
@@ -89,7 +91,7 @@ async function updateTask(req, res) {
   const { taskId } = req.params;
   const { userId } = req.params;
   try {
-    await task.findByIdAndUpdate(
+    await task.findByIdAndUpdate( // need to refactor code to fail
       taskId,
       req.body,
       { new: true },
@@ -113,7 +115,7 @@ async function updateTask(req, res) {
     res.send(populatedUser.lists);
   } catch (error) {
     res.status(400);
-    res.send({ error: JSON.stringify(error), message: 'Could not update task' });
+    res.send({ message: 'Could not update task' }); // error: JSON.stringify(error),
     console.error(error); // eslint-disable-line
   }
 }
@@ -132,7 +134,7 @@ async function deleteTask(req, res) {
     res.send(updatedUser);
   } catch (error) {
     res.status(400);
-    res.send({ error: JSON.stringify(error), message: 'Could not delete section' });
+    res.send({ message: 'Could not delete section' }); //  error: JSON.stringify(error),
     console.error(error); // eslint-disable-line
   }
 }
