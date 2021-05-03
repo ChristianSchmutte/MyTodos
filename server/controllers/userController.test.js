@@ -9,16 +9,6 @@ beforeEach(() => {
   user.create = jest.fn();
 });
 
-// jest.mock('../models/user', () => ({
-//   create: async () => ({
-//     _id: 123,
-//     firstName: 'firstName',
-//     lastName: 'lastName',
-//     email: 'email',
-//     password: 'password',
-//   }),
-// }));
-
 describe('addUser', () => {
   let userMock;
   beforeEach(() => {
@@ -58,7 +48,7 @@ describe('addUser', () => {
     });
   });
   it('should throw an error if firstname is not provided', async () => {
-    userMock.firstName = undefined;
+    userMock.firstName = '';
     const mReq = {
       body: {
         ...userMock,

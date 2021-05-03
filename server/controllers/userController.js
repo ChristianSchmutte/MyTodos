@@ -1,20 +1,26 @@
 const user = require('../models/user');
 
 async function addUser(req, res) {
-  if (req.body.firstName === undefined
-    || req.body.lastName === undefined
-    || req.body.email === undefined
-    || req.body.password === undefined
-  ) {
+  const { firstName, lastName, email, password } = req.body;
+
+  // combined version like param === (undefined || null || '') doesn't resolve the issue
+  const checkUndefined = firstName === undefined
+  || lastName === undefined
+  || email === undefined
+  || password === undefined;
+  const checkNull = firstName === null
+  || lastName === null
+  || email === null
+  || password === null;
+  const checkEmptyString = firstName === ''
+  || lastName === ''
+  || email === ''
+  || password === '';
+
+  if (checkUndefined || checkNull || checkEmptyString) {
     res.status(400);
     res.send({ message: 'Invalid body' });
   } else {
-    const {
-      firstName,
-      lastName,
-      email,
-      password,
-    } = req.body;
     try {
       const newUser = await user.create({
         firstName,
