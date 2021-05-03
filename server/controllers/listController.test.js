@@ -8,6 +8,7 @@ const {
   addList,
   updateListsOrder,
   updateTasksOrder,
+  deleteList,
 } = require('./listController');
 const list = require('../models/list');
 const user = require('../models/user');
@@ -28,6 +29,7 @@ describe('listController', () => {
     user.findById = jest.fn();
     user.findByIdAndUpdate = jest.fn();
     list.create = jest.fn();
+    list.findByIdAndDelete = jest.fn();
     list.findById = jest.fn();
     mReq = {
       params: { userId: 1 },
@@ -175,6 +177,40 @@ describe('listController', () => {
   });
 
   describe('deleteList', () => {
-    beforeEach(() => {});
+    const mockResSend = jest.fn();
+    beforeEach(() => {
+      mReq = {
+        params: {
+          listId: 1,
+          userId: 2,
+        },
+      };
+      mRes = {
+        status: jest.fn().mockReturnValue({ send: mockResSend }),
+        send: jest.fn(),
+      };
+    });
+
+    it('should delete a list', async () => {
+      mockExecPopulate.mockResolvedValue({ lists: 'Test' });
+      user.findByIdAndUpdate.mockResolvedValue(mockUser);
+      await deleteList(mReq, mRes);
+
+      expect(list.findByIdAndDelete).toHaveBeenCalledWith(1);
+      expect(mRes.status).toHaveBeenCalledWith(200);
+      expect(mockResSend).toHaveBeenCalledWith('Test');
+    });
+
+    it('should handle model thrown errors', async () => {
+      list.findByIdAndDelete.mockRejectedValue(mockErr);
+
+      await deleteList(mReq, mRes);
+
+      expect(mRes.status).toHaveBeenCalledWith(400);
+      expect(mRes.send).toHaveBeenCalledWith({
+        error: mockErr,
+        message: 'Could not delete list',
+      });
+    });
   });
 });
