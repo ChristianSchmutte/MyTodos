@@ -1,28 +1,32 @@
 const user = require('../models/user');
 const list = require('../models/list');
 
+async function populatedUserListResponse(responseUser, res, status) {
+  const populatedUser = await responseUser
+    .populate({
+      path: 'lists',
+      populate: {
+        path: 'sections',
+        populate: {
+          path: 'tasks',
+          populate: {
+            path: 'lists',
+            select: 'title color',
+          },
+        },
+      },
+    })
+    .execPopulate();
+  res.status(status);
+  res.send(populatedUser.lists);
+}
+
 async function getLists(req, res) {
   const { userId } = req.params;
   try {
     // TODO: should throw error if user does not exist, and not hang
     const currUser = await user.findById(userId);
-    const populatedUser = await currUser
-      .populate({
-        path: 'lists',
-        populate: {
-          path: 'sections',
-          populate: {
-            path: 'tasks',
-            populate: {
-              path: 'lists',
-              select: 'title color',
-            },
-          },
-        },
-      })
-      .execPopulate();
-    res.status(200);
-    res.send(populatedUser.lists);
+    await populatedUserListResponse(currUser, res, 200);
   } catch (error) {
     res.status(500);
     res.send({ error, message: 'Did not find lists for user' });
@@ -51,23 +55,7 @@ async function addList(req, res) {
         },
         { new: true } // eslint-disable-line
       );
-      const populatedUser = await updatedUser
-        .populate({
-          path: 'lists',
-          populate: {
-            path: 'sections',
-            populate: {
-              path: 'tasks',
-              populate: {
-                path: 'lists',
-                select: 'title color',
-              },
-            },
-          },
-        })
-        .execPopulate();
-      res.status(201);
-      res.send(populatedUser.lists);
+      await populatedUserListResponse(updatedUser, res, 201);
     } catch (error) {
       res.status(400);
       res.send({ error, message: 'Could not add list' });
@@ -136,22 +124,7 @@ async function deleteList(req, res) {
       { $pull: { lists: listId } },
       { new: true } // eslint-disable-line
     );
-    const populatedUser = await updatedUser
-      .populate({
-        path: 'lists',
-        populate: {
-          path: 'sections',
-          populate: {
-            path: 'tasks',
-            populate: {
-              path: 'lists',
-              select: 'title color',
-            },
-          },
-        },
-      })
-      .execPopulate();
-    res.status(200).send(populatedUser.lists);
+    await populatedUserListResponse(updatedUser, res, 200);
   } catch (error) {
     res.status(400);
     res.send({ error, message: 'Could not delete list' });

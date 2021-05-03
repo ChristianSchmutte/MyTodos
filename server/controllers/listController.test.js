@@ -198,7 +198,7 @@ describe('listController', () => {
 
       expect(list.findByIdAndDelete).toHaveBeenCalledWith(1);
       expect(mRes.status).toHaveBeenCalledWith(200);
-      expect(mockResSend).toHaveBeenCalledWith('Test');
+      expect(mRes.send).toHaveBeenCalledWith('Test');
     });
 
     it('should handle model thrown errors', async () => {
