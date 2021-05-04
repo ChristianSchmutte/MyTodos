@@ -1,5 +1,8 @@
+import * as dotenv from 'dotenv';
+
+dotenv.config();
 const baseUrl = 'http://localhost:3001';
-const userId = '60871178721df63b1cbd1593';
+const userId = process.env.USER_ID;
 
 export async function fetchAllLists() {
   try {
@@ -41,11 +44,14 @@ export async function updateListsOrderInDb(lists) {
 
 export async function updateTasksOrderInDb(listId, sections) {
   try {
-    const res = await fetch(`${baseUrl}/users/${userId}/lists/${listId}/order`, {
-      method: 'PUT',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ sections }),
-    });
+    const res = await fetch(
+      `${baseUrl}/users/${userId}/lists/${listId}/order`,
+      {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ sections }),
+      }
+    );
     return await res.json();
   } catch (error) {
     console.error(error); // eslint-disable-line
@@ -68,11 +74,14 @@ export async function deleteList(listId) {
 
 export async function addSection({ title, listId }) {
   try {
-    const res = await fetch(`${baseUrl}/users/${userId}/lists/${listId}/sections/`, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ title }),
-    });
+    const res = await fetch(
+      `${baseUrl}/users/${userId}/lists/${listId}/sections/`,
+      {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ title }),
+      }
+    );
     return await res.json();
   } catch (error) {
     console.error(error); // eslint-disable-line
@@ -82,10 +91,13 @@ export async function addSection({ title, listId }) {
 
 export async function deleteSection({ listId, sectionId }) {
   try {
-    const res = await fetch(`${baseUrl}/users/${userId}/lists/${listId}/sections/${sectionId}`, {
-      method: 'DELETE',
-      headers: { 'Content-Type': 'application/json' },
-    });
+    const res = await fetch(
+      `${baseUrl}/users/${userId}/lists/${listId}/sections/${sectionId}`,
+      {
+        method: 'DELETE',
+        headers: { 'Content-Type': 'application/json' },
+      }
+    );
     return await res.json();
   } catch (error) {
     console.error(error); // eslint-disable-line
@@ -95,11 +107,14 @@ export async function deleteSection({ listId, sectionId }) {
 
 export async function addNewTask({ title, listId, sectionId }) {
   try {
-    const res = await fetch(`${baseUrl}/users/${userId}/lists/${listId}/sections/${sectionId}/tasks`, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ title }),
-    });
+    const res = await fetch(
+      `${baseUrl}/users/${userId}/lists/${listId}/sections/${sectionId}/tasks`,
+      {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ title }),
+      }
+    );
     return await res.json();
   } catch (error) {
     console.error(error); // eslint-disable-line
@@ -109,11 +124,14 @@ export async function addNewTask({ title, listId, sectionId }) {
 
 export async function addExistingTask({ taskId, listId, sectionId }) {
   try {
-    const res = await fetch(`${baseUrl}/users/${userId}/lists/${listId}/sections/${sectionId}/tasks`, {
-      method: 'PUT',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ taskId }),
-    });
+    const res = await fetch(
+      `${baseUrl}/users/${userId}/lists/${listId}/sections/${sectionId}/tasks`,
+      {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ taskId }),
+      }
+    );
     return await res.json();
   } catch (error) {
     console.error(error); // eslint-disable-line
