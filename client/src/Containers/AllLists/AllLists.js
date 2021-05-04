@@ -61,7 +61,6 @@ export function AllLists() {
 
     dispatch(updateListsOrderAsync({ source, destination }));
   }
-  console.log(lists);
   const renderedLists = !lists.error ? lists.map((list, index) => (
     <ListItem
       key={list._id}

@@ -5,14 +5,14 @@ import App from './App';
 
 test('show add task', () => {
    render(<App/>);
-   const input = screen.getByLabelText('addList');
+  //  const input = screen.getByLabelText('addList');
 
    // assert
 });
 
-jest.mock('../path', () => ({
-  addTask: () => ({list: 'testList'})
-}));
+// jest.mock('../pathToService', () => ({
+//   addTask: () => ({list: 'testList'})
+// }));
 
 it ('should write task', async () => {
   const input = screen.getByLabelText('addList');

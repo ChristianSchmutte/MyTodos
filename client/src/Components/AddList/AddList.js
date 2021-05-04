@@ -44,6 +44,7 @@ export function AddList() {
           value={list}
           type="text"
           placeholder="Add List"
+          name="addList"
           onFocus={(e) => (e.target.placeholder = 'New List')} // eslint-disable-line
           onBlur={(e) => (e.target.placeholder = 'Add List')} // eslint-disable-line
         />
