@@ -2,7 +2,7 @@ const user = require('../models/user');
 
 async function addUser(req, res) {
   const {
-    firstName, lastName, email, password
+    firstName, lastName, email, password,
   } = req.body;
 
   // like param === (undefined || null || '') doesn't resolve the issue

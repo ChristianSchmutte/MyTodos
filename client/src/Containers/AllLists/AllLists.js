@@ -20,6 +20,7 @@ const ListItemsWrap = styled.div`
 
 export function AllLists() {
   const lists = useSelector(selectLists);
+  console.log(lists);
   const status = useSelector(selectStatus);
 
   const dispatch = useDispatch();
@@ -61,7 +62,7 @@ export function AllLists() {
 
     dispatch(updateListsOrderAsync({ source, destination }));
   }
-  const renderedLists = !lists.error ? lists.map((list, index) => (
+  const renderedLists = lists && !lists.error ? lists.map((list, index) => (
     <ListItem
       key={list._id}
       title={list.title}

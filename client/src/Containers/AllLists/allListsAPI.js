@@ -1,7 +1,7 @@
-// require('dotenv').config();
-
 const baseUrl = 'http://localhost:3001';
+
 // const userId = process.env.USER_ID;
+
 const userId = '608a93e283f0c82f9facbd6f';
 export async function fetchAllLists() {
   try {
