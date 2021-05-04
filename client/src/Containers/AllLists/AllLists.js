@@ -61,15 +61,15 @@ export function AllLists() {
 
     dispatch(updateListsOrderAsync({ source, destination }));
   }
-
-  const renderedLists = lists.map((list, index) => (
+  console.log(lists);
+  const renderedLists = !lists.error ? lists.map((list, index) => (
     <ListItem
       key={list._id}
       title={list.title}
       id={list._id}
       index={index}
     />
-  ));
+  )) : 'No Lists';
   return (
     <div className="AllLists">
       <DragDropContext
