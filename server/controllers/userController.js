@@ -22,8 +22,8 @@ async function addUser(req, res) {
       res.status(201);
       res.send({ message: 'Successfully created new user', _id: newUser._id }); // eslint-disable-line
     } catch (error) {
-      res.status(500);
-      console.error(error); // eslint-disable-line
+      res.status(500).end(); // .end()
+      // console.error(error); // eslint-disable-line
     }
   }
 }

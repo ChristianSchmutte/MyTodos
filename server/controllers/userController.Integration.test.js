@@ -28,14 +28,46 @@ beforeAll(async () => {
       }
     } // eslint-disable-line
   );
-
 });
-it('Should save user to database', async (done) => {
-  const res = await request.post('/users').send({
-    firstName: 'Anna',
-    lastName: 'Lamer',
-    email: 'testing@email.com',
-    password: 'secret',
+
+// afterAll(async () => {
+//   // Closes the Mongoose connection
+//   await mongoose.connection.close();
+// });
+
+describe('test route for add user', () => {
+  let userMock;
+  beforeEach(() => {
+    userMock = {
+      firstName: 'firstName',
+      lastName: 'lastName',
+      email: 'email',
+      password: 'password',
+    };
   });
-  done();
+
+  it('Should save user to database', async (done) => {
+    const res = await request.post('/users').send({
+      ...userMock,
+    });
+    expect(res.status).toBe(201);
+    done();
+  });
+  it('Should not save user to database', async (done) => {
+    userMock.password = undefined;
+    const res = await request.post('/users').send({
+      userMock,
+    });
+    expect(res.status).toBe(400);
+    done();
+  });
+  it('Should not save user to database, because of async error', async (done) => {
+    userMock.firstName = {};
+
+    const res = await request.post('/users').send({
+      ...userMock,
+    });
+    expect(res.status).toBe(500);
+    done();
+  });
 });
