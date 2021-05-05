@@ -20,7 +20,7 @@ const ListItemsWrap = styled.div`
 
 export function AllLists() {
   const lists = useSelector(selectLists);
-  console.log(lists);
+  console.log(`lists ${lists}`, lists);
   const status = useSelector(selectStatus);
 
   const dispatch = useDispatch();
