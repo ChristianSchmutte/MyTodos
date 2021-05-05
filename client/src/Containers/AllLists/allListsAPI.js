@@ -50,7 +50,7 @@ export async function updateTasksOrderInDb(listId, sections) {
         method: 'PUT',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ sections }),
-      }
+      },
     );
     return await res.json();
   } catch (error) {
@@ -80,7 +80,7 @@ export async function addSection({ title, listId }) {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ title }),
-      }
+      },
     );
     return await res.json();
   } catch (error) {
@@ -96,7 +96,7 @@ export async function deleteSection({ listId, sectionId }) {
       {
         method: 'DELETE',
         headers: { 'Content-Type': 'application/json' },
-      }
+      },
     );
     return await res.json();
   } catch (error) {
@@ -113,7 +113,7 @@ export async function addNewTask({ title, listId, sectionId }) {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ title }),
-      }
+      },
     );
     return await res.json();
   } catch (error) {
@@ -130,7 +130,7 @@ export async function addExistingTask({ taskId, listId, sectionId }) {
         method: 'PUT',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ taskId }),
-      }
+      },
     );
     return await res.json();
   } catch (error) {

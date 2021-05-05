@@ -29,13 +29,13 @@ const initialState = {
 export const fetchAllListsAsync = createAsyncThunk(
   'allLists/fetchAllLists',
   // The value we return becomes the `fulfilled` action payload
-  async () => fetchAllLists(),
+  async () => fetchAllLists()
 );
 
 export const addListAsync = createAsyncThunk(
   'allLists/addList',
   // The value we return becomes the `fulfilled` action payload
-  async (title) => addList(title),
+  async (title) => addList(title)
 );
 
 export const updateListsOrderAsync = createAsyncThunk(
@@ -46,7 +46,7 @@ export const updateListsOrderAsync = createAsyncThunk(
     await dispatch(updateListsOrder(lists));
     const updatedListIds = _.map(getState().allLists.lists, '_id');
     updateListsOrderInDb(updatedListIds);
-  },
+  }
 );
 
 export const updateTasksOrderAsync = createAsyncThunk(
@@ -56,15 +56,18 @@ export const updateTasksOrderAsync = createAsyncThunk(
     // eslint-disable-next-line no-use-before-define
     await dispatch(updateTasksOrder(tasks));
     const currListId = getState().allLists.currentList._id;
-    const sections = _.map(getState().allLists.currentList.sections, (section) => {
-      const currSection = {
-        _id: section._id,
-        tasks: _.map(section.tasks, '_id'),
-      };
-      return currSection;
-    });
+    const sections = _.map(
+      getState().allLists.currentList.sections,
+      (section) => {
+        const currSection = {
+          _id: section._id,
+          tasks: _.map(section.tasks, '_id'),
+        };
+        return currSection;
+      }
+    );
     updateTasksOrderInDb(currListId, sections);
-  },
+  }
 );
 
 export const updateSectionsOrderAsync = createAsyncThunk(
@@ -74,51 +77,56 @@ export const updateSectionsOrderAsync = createAsyncThunk(
     // eslint-disable-next-line no-use-before-define
     await dispatch(updateSectionsOrder(sections));
     const currListId = getState().allLists.currentList._id;
-    const updatedSections = _.map(getState().allLists.currentList.sections, (section) => {
-      const currSection = {
-        _id: section._id,
-        tasks: _.map(section.tasks, '_id'),
-      };
-      return currSection;
-    });
+    const updatedSections = _.map(
+      getState().allLists.currentList.sections,
+      (section) => {
+        const currSection = {
+          _id: section._id,
+          tasks: _.map(section.tasks, '_id'),
+        };
+        return currSection;
+      }
+    );
     updateTasksOrderInDb(currListId, updatedSections);
-  },
+  }
 );
 
 export const deleteListAsync = createAsyncThunk(
   'allLists/deleteList',
   // The value we return becomes the `fulfilled` action payload
-  async (listId) => deleteList(listId),
+  async (listId) => deleteList(listId)
 );
 
 export const addSectionAsync = createAsyncThunk(
   'allLists/addSection',
   // The value we return becomes the `fulfilled` action payload
-  async ({ title, listId }) => addSection({ title, listId }),
+  async ({ title, listId }) => addSection({ title, listId })
 );
 
 export const deleteSectionAsync = createAsyncThunk(
   'allLists/deleteSection',
   // The value we return becomes the `fulfilled` action payload
-  async ({ sectionId, listId }) => deleteSection({ sectionId, listId }),
+  async ({ sectionId, listId }) => deleteSection({ sectionId, listId })
 );
 
 export const addNewTaskAsync = createAsyncThunk(
   'allLists/addNewTask',
   // The value we return becomes the `fulfilled` action payload
-  async ({ title, listId, sectionId }) => addNewTask({ title, listId, sectionId }),
+  async ({ title, listId, sectionId }) =>
+    addNewTask({ title, listId, sectionId })
 );
 
 export const addExistingTaskAsync = createAsyncThunk(
   'allLists/addExistingTask',
   // The value we return becomes the `fulfilled` action payload
-  async ({ taskId, listId, sectionId }) => addExistingTask({ taskId, listId, sectionId }),
+  async ({ taskId, listId, sectionId }) =>
+    addExistingTask({ taskId, listId, sectionId })
 );
 
 export const updateTaskAsync = createAsyncThunk(
   'allLists/updateTask',
   // The value we return becomes the `fulfilled` action payload
-  async ({ taskId, payload }) => updateTask({ taskId, payload }),
+  async ({ taskId, payload }) => updateTask({ taskId, payload })
 );
 
 export const allListsSlice = createSlice({
@@ -149,36 +157,46 @@ export const allListsSlice = createSlice({
     updateTasksOrder: (state, action) => {
       const { source, destination } = action.payload;
       const sourceSectionIndex = state.currentList.sections.findIndex(
-        (section) => section._id === source.droppableId,
+        (section) => section._id === source.droppableId
       );
-      const [movedTask] = state.currentList.sections[sourceSectionIndex].tasks
-        .splice(source.index, 1);
+      const [movedTask] = state.currentList.sections[
+        sourceSectionIndex
+      ].tasks.splice(source.index, 1);
       // Move task within the same section
       if (source.droppableId === destination.droppableId) {
-        state.currentList.sections[sourceSectionIndex].tasks
-          .splice(destination.index, 0, movedTask);
+        state.currentList.sections[sourceSectionIndex].tasks.splice(
+          destination.index,
+          0,
+          movedTask
+        );
       } else {
         // Move task to another section
         const destinationSectionIndex = state.currentList.sections.findIndex(
-          (section) => section._id === destination.droppableId,
+          (section) => section._id === destination.droppableId
         );
-        state.currentList.sections[destinationSectionIndex].tasks
-          .splice(destination.index, 0, movedTask);
+        state.currentList.sections[destinationSectionIndex].tasks.splice(
+          destination.index,
+          0,
+          movedTask
+        );
       }
     },
     // Use the PayloadAction type to declare the contents of `action.payload`
     showList: (state, action) => {
-      state.currentList = state.lists.find((list) => list._id === action.payload);
+      state.currentList = state.lists.find(
+        (list) => list._id === action.payload
+      );
     },
     // Use the PayloadAction type to declare the contents of `action.payload`
     setTaskTitle: (state, action) => {
       const sectionIndex = state.currentList.sections.findIndex(
-        (section) => section._id === action.payload.sectionId,
+        (section) => section._id === action.payload.sectionId
       );
-      const taskIndex = state.currentList.sections[sectionIndex].tasks.findIndex(
-        (task) => task._id === action.payload.taskId,
-      );
-      state.currentList.sections[sectionIndex].tasks[taskIndex].title = action.payload.title;
+      const taskIndex = state.currentList.sections[
+        sectionIndex
+      ].tasks.findIndex((task) => task._id === action.payload.taskId);
+      state.currentList.sections[sectionIndex].tasks[taskIndex].title =
+        action.payload.title;
     },
   },
   // The `extraReducers` field lets the slice handle actions defined elsewhere,
@@ -220,7 +238,9 @@ export const allListsSlice = createSlice({
       .addCase(addSectionAsync.fulfilled, (state, action) => {
         state.status = 'idle';
         state.lists = action.payload;
-        state.currentList = state.lists.find((list) => list._id === state.currentList._id);
+        state.currentList = state.lists.find(
+          (list) => list._id === state.currentList._id
+        );
       })
       .addCase(deleteSectionAsync.pending, (state) => {
         state.status = 'loading';
@@ -228,7 +248,9 @@ export const allListsSlice = createSlice({
       .addCase(deleteSectionAsync.fulfilled, (state, action) => {
         state.status = 'idle';
         state.lists = action.payload;
-        state.currentList = state.lists.find((list) => list._id === state.currentList._id);
+        state.currentList = state.lists.find(
+          (list) => list._id === state.currentList._id
+        );
       })
       .addCase(addNewTaskAsync.pending, (state) => {
         state.status = 'loading';
@@ -236,7 +258,9 @@ export const allListsSlice = createSlice({
       .addCase(addNewTaskAsync.fulfilled, (state, action) => {
         state.status = 'idle';
         state.lists = action.payload;
-        state.currentList = state.lists.find((list) => list._id === state.currentList._id);
+        state.currentList = state.lists.find(
+          (list) => list._id === state.currentList._id
+        );
       })
       .addCase(addExistingTaskAsync.pending, (state) => {
         state.status = 'loading';
@@ -244,7 +268,9 @@ export const allListsSlice = createSlice({
       .addCase(addExistingTaskAsync.fulfilled, (state, action) => {
         state.status = 'idle';
         state.lists = action.payload;
-        state.currentList = state.lists.find((list) => list._id === state.currentList._id);
+        state.currentList = state.lists.find(
+          (list) => list._id === state.currentList._id
+        );
       })
       .addCase(updateTaskAsync.pending, (state) => {
         state.status = 'loading';
@@ -252,7 +278,9 @@ export const allListsSlice = createSlice({
       .addCase(updateTaskAsync.fulfilled, (state, action) => {
         state.status = 'idle';
         state.lists = action.payload;
-        state.currentList = state.lists.find((list) => list._id === state.currentList._id);
+        state.currentList = state.lists.find(
+          (list) => list._id === state.currentList._id
+        );
       });
   },
 });
@@ -279,19 +307,40 @@ export const selectTasksInOtherLists = (state) => {
   if (!state.allLists) return [];
   if (!state.allLists.currentList) return [];
   const currentListId = state.allLists.currentList._id;
-  const otherLists = state.allLists.lists.filter((list) => list._id !== currentListId);
-  const sectionsInOtherLists = otherLists.reduce((acc, list,) => ( // eslint-disable-line
-    acc = [...acc, list.sections]
-  ), []);
-  const tasksInOtherLists = sectionsInOtherLists.flat().reduce((acc, section) => ( // eslint-disable-line
-    acc = [...acc, section.tasks]
-  ), []).flat();
-  const tasksInCurrentList = state.allLists.currentList.sections.flat().reduce((acc, section) => ( // eslint-disable-line
-    acc = [...acc, section.tasks]
-  ), []).flat();
+  const otherLists = state.allLists.lists.filter(
+    (list) => list._id !== currentListId
+  );
+  const sectionsInOtherLists = otherLists.reduce(
+    (
+      acc,
+      list // eslint-disable-line
+    ) => (acc = [...acc, list.sections]),
+    []
+  );
+  const tasksInOtherLists = sectionsInOtherLists
+    .flat()
+    .reduce(
+      (
+        acc,
+        section // eslint-disable-line
+      ) => (acc = [...acc, section.tasks]),
+      []
+    )
+    .flat();
+  const tasksInCurrentList = state.allLists.currentList.sections
+    .flat()
+    .reduce(
+      (
+        acc,
+        section // eslint-disable-line
+      ) => (acc = [...acc, section.tasks]),
+      []
+    )
+    .flat();
   const idsOfTasksInCurrentList = _.map(tasksInCurrentList, '_id');
-  const filteredTasksInOtherLists = tasksInOtherLists
-    .filter((task) => !_.includes(idsOfTasksInCurrentList, task._id));
+  const filteredTasksInOtherLists = tasksInOtherLists.filter(
+    (task) => !_.includes(idsOfTasksInCurrentList, task._id)
+  );
   return _.uniqBy(filteredTasksInOtherLists, '_id');
 };
 
