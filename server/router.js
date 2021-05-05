@@ -41,13 +41,24 @@ router.post('/users/:userId/lists/:listId/sections', addSection);
 
 router.put('/users/:userId/lists/:listId/sections/:sectionId', updateSection);
 
-router.delete('/users/:userId/lists/:listId/sections/:sectionId', deleteSection);
+// prettier-ignore
+router.delete(
+  '/users/:userId/lists/:listId/sections/:sectionId',
+  deleteSection,
+);
 
 // Tasks
 
-router.post('/users/:userId/lists/:listId/sections/:sectionId/tasks', addNewTask);
-
-router.put('/users/:userId/lists/:listId/sections/:sectionId/tasks', addExistingTask);
+// prettier-ignore
+router.post(
+  '/users/:userId/lists/:listId/sections/:sectionId/tasks',
+  addNewTask,
+);
+// prettier-ignore
+router.put(
+  '/users/:userId/lists/:listId/sections/:sectionId/tasks',
+  addExistingTask,
+);
 
 router.put('/users/:userId/tasks/:taskId', updateTask);
 
